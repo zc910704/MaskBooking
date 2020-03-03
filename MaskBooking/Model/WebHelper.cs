@@ -105,7 +105,7 @@ namespace MaskBooking.Model
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
             httpWebRequest.ContentType = "application/json;charset=UTF-8";
             httpWebRequest.Method = "POST";
-            httpWebRequest.SendChunked = true;
+            //httpWebRequest.SendChunked = true;
             httpWebRequest.ServicePoint.Expect100Continue = false;
             //这里会引发System.IO.IOException: 在写入所有字节之前不能关闭流。错误
             //原因：https://blog.csdn.net/zhouyingge1104/article/details/43883319?utm_source=blogxgwz0
