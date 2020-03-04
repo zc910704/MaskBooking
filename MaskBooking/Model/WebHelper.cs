@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -30,7 +31,7 @@ namespace MaskBooking.Model
                 header.Add("Cookie", Config.cookie);
             }
             httpWebRequest.Headers = header;
-            httpWebRequest.Connection = "close";
+            SetHeaderValue(httpWebRequest.Headers, "Connection", "close");
             httpWebRequest.Accept = "application/json, text/javascript, */*; q=0.01";
             httpWebRequest.KeepAlive = false;
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
@@ -103,9 +104,9 @@ namespace MaskBooking.Model
                 header.Add("Cookie", Config.cookie);
             }
             httpWebRequest.Headers = header;
+            SetHeaderValue(header, "Connection", "close");
             httpWebRequest.Accept = "application/json, text/javascript, */*; q=0.01";
             httpWebRequest.KeepAlive = false;
-            httpWebRequest.Connection = "close";
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
             httpWebRequest.ContentType = "application/json;charset=UTF-8";
             httpWebRequest.Method = "POST";
@@ -134,5 +135,16 @@ namespace MaskBooking.Model
             }
             return responseJsonStr;
         }
-}
+
+        public static void SetHeaderValue(WebHeaderCollection header, string name, string value)
+        {
+            var property = typeof(WebHeaderCollection).GetProperty("InnerCollection",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (property != null)
+            {
+                var collection = property.GetValue(header, null) as NameValueCollection;
+                collection[name] = value;
+            }
+        }
+    }
 }
