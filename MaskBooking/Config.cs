@@ -23,7 +23,7 @@ namespace MaskBooking.Model
         // 不填
         public static string cookie = "";
         // 当前时间与对方服务端的时间差，我的时间和对方服务端大概差了 30s  如果出现一直请求频繁，可以尝试更改这个时间
-        public static long timeDifference = -20000;
+        public static long timeDifference = 30000;
     }
 
     // 信息配置

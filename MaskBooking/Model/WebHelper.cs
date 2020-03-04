@@ -30,8 +30,9 @@ namespace MaskBooking.Model
                 header.Add("Cookie", Config.cookie);
             }
             httpWebRequest.Headers = header;
+            httpWebRequest.Connection = "close";
             httpWebRequest.Accept = "application/json, text/javascript, */*; q=0.01";
-            httpWebRequest.KeepAlive = true;
+            httpWebRequest.KeepAlive = false;
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
             httpWebRequest.ContentType = "application/json;charset=UTF-8";
             httpWebRequest.Method = "GET";
@@ -58,6 +59,8 @@ namespace MaskBooking.Model
                     responseJsonStr = reader.ReadToEnd();
                 }
             }
+            httpWebRequest = null;
+            GC.Collect();
             return responseJsonStr;
         }
 
@@ -101,7 +104,8 @@ namespace MaskBooking.Model
             }
             httpWebRequest.Headers = header;
             httpWebRequest.Accept = "application/json, text/javascript, */*; q=0.01";
-            httpWebRequest.KeepAlive = true;
+            httpWebRequest.KeepAlive = false;
+            httpWebRequest.Connection = "close";
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
             httpWebRequest.ContentType = "application/json;charset=UTF-8";
             httpWebRequest.Method = "POST";
@@ -130,5 +134,5 @@ namespace MaskBooking.Model
             }
             return responseJsonStr;
         }
-    }
+}
 }
