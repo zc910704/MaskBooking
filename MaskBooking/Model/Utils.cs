@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -113,6 +114,51 @@ namespace MaskBooking.Model
             DateTime dtFrom = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             long currentMillis = (currentTicks - dtFrom.Ticks) / 10000;
             return currentMillis;
+        }
+
+        /// <summary>
+        /// 获取页面中的时间戳，用于返回的json中的加密hash
+        /// </summary>
+        /// <returns></returns>
+        public static string GetHtmlTimestamp(string htmlstring)
+        {
+            //<input type="hidden" id="current_time" name="timestamp" value="1583499470422" />;
+            Regex re = new Regex("timestamp.+(?<timestamp>[0-9]{13})");
+            if (re.IsMatch(htmlstring))
+            {
+                Match mh = re.Match(htmlstring);
+                var str = mh.Groups["timestamp"].Value;
+                return str;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        /// <summary>
+        /// 载入用户配置
+        /// </summary>
+        public static UserInfo LoadUserInfoConfig()
+        {
+            using (StreamReader reader = new StreamReader(new FileStream(@"UserInfo.json",FileMode.Open)))
+            {
+                var JsonStr = reader.ReadToEnd();
+                UserInfo JsonConfig = JsonConvert.DeserializeObject<UserInfo>(JsonStr);
+                return JsonConfig;
+            }
+        }
+
+        /// <summary>
+        /// 载入OCR配置
+        /// </summary>
+        public static OCRConfig LoadOCRConfig()
+        {
+            using (StreamReader reader = new StreamReader(new FileStream(@"BaiduOCR.json", FileMode.Open)))
+            {
+                var JsonStr = reader.ReadToEnd();
+                OCRConfig JsonConfig = JsonConvert.DeserializeObject<OCRConfig>(JsonStr);
+                return JsonConfig;
+            }
         }
     }
 }

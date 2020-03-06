@@ -17,6 +17,35 @@ namespace MaskBooking.Model
 {
     public class MaskBooking
     {
+        public UserInfo UserInfo { set; get; }
+        public OCRConfig OCRConfig { set; get; }
+
+        public MaskBooking()
+        {
+            this.LoadConfig();
+        }
+
+        /// <summary>
+        /// 加载配置
+        /// </summary>
+        private void LoadConfig()
+        {
+            try
+            {
+                UserInfo = Utils.LoadUserInfoConfig();
+            }
+            catch
+            {
+                throw new UserInfoLoadException();
+            }
+            try
+            {
+                OCRConfig = Utils.LoadOCRConfig();
+            }
+            catch
+            { }
+        }
+
         public string RequestCaptchaImg()
         {
             string url = Config.baseUrl + "/mask/captcha";
@@ -40,78 +69,22 @@ namespace MaskBooking.Model
         /// </summary>
         /// <param name="stocks"></param>
         /// <returns></returns>
-        public string PostPurchaseInfo(List<StockInfo> stocks)
+        public string PostPurchaseInfo(List<StockInfo> stocks, string timestamp)
         {
             var EncodedUrl = UrlHandler.isvData(Config.baseUrl + "/mask/book");
             var stock = GetAviliableStock(stocks);
-            var response = WebHelper.PostMethod(stock, EncodedUrl);
+            var response = WebHelper.PostMethod(stock, EncodedUrl, timestamp, UserInfo);
             return response;
 
         }
 
-        /// <summary>
-        /// 调用脚本提交信息
-        /// </summary>
-        /// <param name="stocks"></param>
-        /// <returns></returns>
-        public void PostPurchaseINfoByScript(List<StockInfo> stocks)
+        public string RequestIndexPage()
         {
-            var EncodedUrl = UrlHandler.isvData(Config.baseUrl + "/mask/book");
-            var stock = GetAviliableStock(stocks);
-
-            var timestamp = (Utils.GetMilliSecondsTime() - Config.timeDifference).ToString();
-            string hash = Utils.hex_md5(timestamp + "c7c7405208624ed90976f0672c09b884");
-
-            Dictionary<string, string> dic = new Dictionary<string, string>()
-            {
-                {"name", UserInfo.name},
-                {"cardNo", UserInfo.cardNo},
-                {"phone", UserInfo.phone},
-                {"reservationNumber", UserInfo.reservationNumber},
-                {"pharmacyName", UserInfo.pharmacyName},
-                {"pharmacyCode", UserInfo.pharmacyCode},
-                {"hash", hash},
-                {"pharmacyPhase", stock.value},
-                {"pharmacyPhaseName", stock.text},
-                {"captcha", UserInfo.captcha},
-                {"timestamp", timestamp}
-            };
-            var requestJsonBody = JsonConvert.SerializeObject(dic);
-
-            RunPythonScript("post.py", "-u",EncodedUrl,Config.cookie, requestJsonBody);
-
+            var url = Config.baseUrl + "/mask/book-view";
+            var htmlResponse = WebHelper.GetMethod(url);
+            return htmlResponse;
         }
 
-        public static void RunPythonScript(string sArgName, string args = "-u", params string[] teps)
-        {
-            Process p = new Process();
-            string path = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase + sArgName;
-            p.StartInfo.FileName = @"python.exe";
-            string sArguments = path;
-            foreach (string sigstr in teps)
-            {
-                sArguments += " " + sigstr;//传递参数
-            }
-
-            sArguments += " " + args;
-
-            p.StartInfo.Arguments = sArguments;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardInput = true;
-            p.StartInfo.CreateNoWindow = true;
-            p.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
-            p.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
-            p.Start();
-            p.BeginOutputReadLine();
-            Console.ReadLine();
-            p.WaitForExit();
-        }
-
-        private static void OutputHandler(object sender, DataReceivedEventArgs e)
-        {
-            Console.WriteLine(e.Data);
-        }
 
         /// <summary>
         /// 计算该天是否能抢到库存

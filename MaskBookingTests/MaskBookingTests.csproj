@@ -57,11 +57,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Model\isvDataHelperTests.cs" />
-    <Compile Include="Model\MaskBookingTests.cs" />
     <Compile Include="Model\OcrTests.cs" />
     <Compile Include="Model\RequestTests.cs" />
     <Compile Include="Model\UtilsTests.cs" />
-    <Compile Include="Model\WebHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +70,9 @@
       <Project>{9FDC6844-CBA5-4BEA-B389-124FFD60E100}</Project>
       <Name>MaskBooking</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\index.html" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

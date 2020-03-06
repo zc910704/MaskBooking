@@ -19,5 +19,28 @@ namespace MaskBooking.Model.Tests
             var hashed = Utils.hex_md5(time + "c7c7405208624ed90976f0672c09b884");
             Assert.AreEqual(hashexpect, hashed);
         }
+
+        [TestMethod()]
+        public void GetHtmlTimestampTest()
+        {
+            string input = "<input type=\"hidden\" id=\"current_time\" name=\"timestamp\" value=\"1583499470422\" />;";
+            var output = Utils.GetHtmlTimestamp(input);
+            if (string.IsNullOrEmpty(output))
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod()]
+        public void LoadConfigTest()
+        {
+            var json = Utils.LoadUserInfoConfig();
+        }
+
+        [TestMethod()]
+        public void LoadOCRConfigTest()
+        {
+            var json = Utils.LoadOCRConfig();
+        }
     }
 }

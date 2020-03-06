@@ -31,9 +31,9 @@ namespace MaskBooking.Model
                 header.Add("Cookie", Config.cookie);
             }
             httpWebRequest.Headers = header;
-            SetHeaderValue(httpWebRequest.Headers, "Connection", "close");
-            httpWebRequest.Accept = "application/json, text/javascript, */*; q=0.01";
-            httpWebRequest.KeepAlive = false;
+            //SetHeaderValue(httpWebRequest.Headers, "Connection", "close");
+            httpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+            httpWebRequest.KeepAlive = true;
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
             httpWebRequest.ContentType = "application/json;charset=UTF-8";
             httpWebRequest.Method = "GET";
@@ -71,24 +71,24 @@ namespace MaskBooking.Model
         /// <param name="stocks"></param>
         /// <param name="EncodedUrl"></param>
         /// <returns></returns>
-        public static string PostMethod(StockInfo stock, string EncodedUrl)
+        public static string PostMethod(StockInfo stock, string EncodedUrl,string timestamp,UserInfo userInfo)
         {
             var requestJsonBody = string.Empty;
-            var timestamp = (Utils.GetMilliSecondsTime() - Config.timeDifference).ToString();
+            //var timestamp = (Utils.GetMilliSecondsTime() - Config.timeDifference).ToString();
             string hash = Utils.hex_md5(timestamp + "c7c7405208624ed90976f0672c09b884");
 
             Dictionary<string, string> dic = new Dictionary<string, string>()
             {
-                {"name", UserInfo.name},
-                {"cardNo", UserInfo.cardNo},
-                {"phone", UserInfo.phone},
-                {"reservationNumber", UserInfo.reservationNumber},
-                {"pharmacyName", UserInfo.pharmacyName},
-                {"pharmacyCode", UserInfo.pharmacyCode},
+                {"name", userInfo.name},
+                {"cardNo", userInfo.cardNo},
+                {"phone", userInfo.phone},
+                {"reservationNumber", userInfo.reservationNumber},
+                {"pharmacyName", userInfo.pharmacyName},
+                {"pharmacyCode", userInfo.pharmacyCode},
                 {"hash", hash},
                 {"pharmacyPhase", stock.value},
                 {"pharmacyPhaseName", stock.text},
-                {"captcha", UserInfo.captcha},
+                {"captcha", userInfo.captcha},
                 {"timestamp", timestamp}
             };
             requestJsonBody = JsonConvert.SerializeObject(dic);
@@ -104,13 +104,13 @@ namespace MaskBooking.Model
                 header.Add("Cookie", Config.cookie);
             }
             httpWebRequest.Headers = header;
-            SetHeaderValue(header, "Connection", "close");
+            //SetHeaderValue(header, "Connection", "close");
             httpWebRequest.Accept = "application/json, text/javascript, */*; q=0.01";
-            httpWebRequest.KeepAlive = false;
+            httpWebRequest.KeepAlive = true;
             httpWebRequest.Host = "kzgm.bbshjz.cn:8000";
             httpWebRequest.ContentType = "application/json;charset=UTF-8";
             httpWebRequest.Method = "POST";
-            //httpWebRequest.SendChunked = true;
+            httpWebRequest.SendChunked = true;
             httpWebRequest.ServicePoint.Expect100Continue = false;
             //这里会引发System.IO.IOException: 在写入所有字节之前不能关闭流。错误
             //原因：https://blog.csdn.net/zhouyingge1104/article/details/43883319?utm_source=blogxgwz0
@@ -119,9 +119,10 @@ namespace MaskBooking.Model
 
             if (!string.IsNullOrEmpty(requestJsonBody))
             {
-                using (var postStream = new StreamWriter(httpWebRequest.GetRequestStream()))
+                using (var postStream = new StreamWriter(httpWebRequest.GetRequestStream(),Encoding.UTF8))
                 {
                     postStream.Write(requestJsonBody);
+                    //postStream.Flush();
                 }
             }
             var responseJsonStr = string.Empty;

@@ -13,10 +13,10 @@ namespace MaskBooking.Model
         /// </summary>
         /// <param name="base64String"></param>
         /// <returns></returns>
-        public static string GetOcrResult(string base64String)
+        public static string GetOcrResult(string base64String,OCRConfig oCRConfig)
         {
 
-            Baidu.Aip.Ocr.Ocr client = new Baidu.Aip.Ocr.Ocr(Config.API_KEY, Config.SECRET_KEY);
+            Baidu.Aip.Ocr.Ocr client = new Baidu.Aip.Ocr.Ocr(oCRConfig.API_KEY, oCRConfig.SECRET_KEY);
             client.Timeout = 1000;  //修改超时时间
 
             byte[] imageBytes = Convert.FromBase64String(base64String);

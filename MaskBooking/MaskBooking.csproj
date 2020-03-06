@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="MaskBookingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,7 +65,8 @@
       <DependentUpon>MaskBookingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\BaiduOcr.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Model\Config.cs" />
+    <Compile Include="Model\Exceptions.cs" />
     <Compile Include="Model\StockInfo.cs" />
     <Compile Include="Model\UrlHandler.cs" />
     <Compile Include="Model\MaskBooking.cs" />
@@ -67,6 +74,9 @@
     <Compile Include="Model\WebHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MaskBookingForm.resx">
       <DependentUpon>MaskBookingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -79,6 +89,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="BaiduOCR.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="UserInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -94,9 +110,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="post.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="post.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
