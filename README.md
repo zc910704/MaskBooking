@@ -31,3 +31,7 @@
 - 全程自行构造header
 
 - 我只是<https://github.com/542154968/getHfMask>的搬运工。顺便感谢提供的帮助。
+
+### 使用截图
+
+![img](https://github.com/zc910704/MaskBooking/MaskBooking/Images/readme.png)

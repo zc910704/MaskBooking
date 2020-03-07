@@ -79,16 +79,16 @@ namespace MaskBooking.Model
 
             Dictionary<string, string> dic = new Dictionary<string, string>()
             {
-                {"name", userInfo.name},
-                {"cardNo", userInfo.cardNo},
-                {"phone", userInfo.phone},
-                {"reservationNumber", userInfo.reservationNumber},
-                {"pharmacyName", userInfo.pharmacyName},
-                {"pharmacyCode", userInfo.pharmacyCode},
+                {"name", userInfo.Name},
+                {"cardNo", userInfo.CardNo},
+                {"phone", userInfo.Phone},
+                {"reservationNumber", userInfo.ReservationNumber},
+                {"pharmacyName", userInfo.PharmacyName},
+                {"pharmacyCode", userInfo.PharmacyCode},
                 {"hash", hash},
                 {"pharmacyPhase", stock.value},
                 {"pharmacyPhaseName", stock.text},
-                {"captcha", userInfo.captcha},
+                {"captcha", userInfo.Captcha},
                 {"timestamp", timestamp}
             };
             requestJsonBody = JsonConvert.SerializeObject(dic);

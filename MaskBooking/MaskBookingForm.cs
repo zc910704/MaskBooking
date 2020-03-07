@@ -28,11 +28,43 @@ namespace MaskBooking
             {
                 booker = new Model.MaskBooking();
             }
-            catch (UserInfoLoadException)
-            {
-                MessageBox.Show("用户信息配置文件加载失败，请检查。");
-            }
+            catch{ }
+            initPharmacyData();
+            initDataBindings();
         }
+        /// <summary>
+        /// 加载药房信息到下拉框
+        /// </summary>
+        private void initPharmacyData()
+        {
+            try
+            {
+                dynamic parmacyData = Utils.LoadParmacyData();
+                foreach (dynamic item in parmacyData["data"])
+                {
+                    cbxPharName.Items.Add(item["name"].Value);
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// 绑定界面
+        /// </summary>
+        private void initDataBindings()
+        {
+            //用户信息
+            this.tbxUsername.DataBindings.Add("Text", booker.UserInfo, "name");
+            this.tbxPhone.DataBindings.Add("Text", booker.UserInfo, "phone");
+            this.tbxID.DataBindings.Add("Text", booker.UserInfo, "cardNo");
+            this.cbxPharName.DataBindings.Add("Text", booker.UserInfo, "pharmacyName");
+            this.tbxPharID.DataBindings.Add("Text", booker.UserInfo, "pharmacyCode");
+            //文字识别接口信息
+            this.tbxAPIID.DataBindings.Add("Text", booker.OCRConfig, "APP_ID");
+            this.tbxAPIKey.DataBindings.Add("Text", booker.OCRConfig, "API_KEY");
+            this.tbxAPIPassword.DataBindings.Add("Text", booker.OCRConfig, "SECRET_KEY");
+        }
+
         //开始
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -74,7 +106,7 @@ namespace MaskBooking
                             List<StockInfo> stocks = booker.ConvertJsonToStock(stocksStr);
                             if (stocks == null)
                                 return;
-                            booker.UserInfo.captcha = tbxCaptcha.Text;
+                            booker.UserInfo.Captcha = tbxCaptcha.Text;
                             var response = booker.PostPurchaseInfo(stocks, timestamp);
                             Log(response);
                         }
@@ -142,5 +174,31 @@ namespace MaskBooking
             about.ShowDialog();
         }
 
+        private void cbxPharName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                dynamic parmacyData = Utils.LoadParmacyData();
+                foreach (dynamic item in parmacyData["data"])
+                {
+                    if (cbxPharName.Text == item["name"].Value)
+                    {
+                        tbxPharID.Text = item["code"].Value;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            try
+            {
+                Utils.WriteOCRConfig(booker.OCRConfig);
+                Utils.WriteUserInfoConfig(booker.UserInfo);
+            }
+            catch { }
+        }
     }
 }

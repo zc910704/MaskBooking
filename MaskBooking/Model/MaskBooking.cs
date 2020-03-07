@@ -34,10 +34,7 @@ namespace MaskBooking.Model
             {
                 UserInfo = Utils.LoadUserInfoConfig();
             }
-            catch
-            {
-                throw new UserInfoLoadException();
-            }
+            catch{ }
             try
             {
                 OCRConfig = Utils.LoadOCRConfig();
@@ -59,7 +56,7 @@ namespace MaskBooking.Model
         /// <returns></returns>
         public string RequestMaskStock()
         {
-            var EncodedUrl = UrlHandler.isvData(Config.baseUrl + "/mask/pharmacy-stock?code=" + UserInfo.pharmacyCode);
+            var EncodedUrl = UrlHandler.isvData(Config.baseUrl + "/mask/pharmacy-stock?code=" + UserInfo.PharmacyCode);
             var jsonResponse = WebHelper.GetMethod(EncodedUrl);
             return jsonResponse;
         }

@@ -147,7 +147,18 @@ namespace MaskBooking.Model
                 return JsonConfig;
             }
         }
-
+        /// <summary>
+        /// 写入用户配置信息
+        /// </summary>
+        /// <param name="userInfo"></param>
+        public static void WriteUserInfoConfig(UserInfo userInfo)
+        {
+            using (StreamWriter writer = new StreamWriter(new FileStream(@"UserInfo.json", FileMode.Create),Encoding.UTF8))
+            {
+                string str = JsonConvert.SerializeObject(userInfo);
+                writer.Write(str);
+            }
+        }
         /// <summary>
         /// 载入OCR配置
         /// </summary>
@@ -158,6 +169,31 @@ namespace MaskBooking.Model
                 var JsonStr = reader.ReadToEnd();
                 OCRConfig JsonConfig = JsonConvert.DeserializeObject<OCRConfig>(JsonStr);
                 return JsonConfig;
+            }
+        }
+        /// <summary>
+        /// 写入OCR配置信息
+        /// </summary>
+        /// <param name="userInfo"></param>
+        public static void WriteOCRConfig(OCRConfig config)
+        {
+            using (StreamWriter writer = new StreamWriter(new FileStream(@"BaiduOCR.json", FileMode.Create), Encoding.UTF8))
+            {
+                string str = JsonConvert.SerializeObject(config);
+                writer.Write(str);
+            }
+        }
+        /// <summary>
+        /// 载入药房配置
+        /// </summary>
+        /// <returns></returns>
+        public static object LoadParmacyData()
+        {
+            using (StreamReader reader = new StreamReader(new FileStream(@"Pharmacy.json", FileMode.Open)))
+            {
+                var JsonStr = reader.ReadToEnd();
+                dynamic Json = JsonConvert.DeserializeObject<dynamic>(JsonStr);
+                return Json;
             }
         }
     }
