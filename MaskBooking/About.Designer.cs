@@ -101,9 +101,9 @@
             this.label6.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.Location = new System.Drawing.Point(66, 237);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(141, 18);
+            this.label6.Size = new System.Drawing.Size(103, 18);
             this.label6.TabIndex = 0;
-            this.label6.Text = "二次开发说明：";
+            this.label6.Text = "开发说明：";
             // 
             // label7
             // 
