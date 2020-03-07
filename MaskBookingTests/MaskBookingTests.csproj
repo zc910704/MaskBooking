@@ -71,9 +71,6 @@
       <Name>MaskBooking</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestData\index.html.txt" />
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
