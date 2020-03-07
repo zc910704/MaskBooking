@@ -34,4 +34,4 @@
 
 ### 使用截图
 
-![img](https://github.com/zc910704/MaskBooking/MaskBooking/Images/readme.png)
+![img](https://github.com/zc910704/MaskBooking/blob/master/MaskBooking/Images/readme.png)
