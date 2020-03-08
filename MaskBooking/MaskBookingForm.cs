@@ -78,7 +78,6 @@ namespace MaskBooking
                         {
                             Log($"正在进行第{i + 1}次尝试，共{retryTime}次");
                             var html = booker.RequestIndexPage();
-
                             string timestamp = Utils.GetHtmlTimestamp(html);
                             Log($"获取首页成功，md5加密用时间戳为{timestamp}");
                             var imageBase64 = booker.RequestCaptchaImg();
@@ -183,7 +182,7 @@ namespace MaskBooking
                 {
                     if (cbxPharName.Text == item["name"].Value)
                     {
-                        tbxPharID.Text = item["code"].Value;
+                        booker.UserInfo.PharmacyCode = item["code"].Value;
                     }
                 }
             }
